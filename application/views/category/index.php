@@ -1,27 +1,28 @@
 
-<br>
+
 <div id="container" class="container">
   <div class="row-fluid">
-    <div class="col-12">
-      <div class="row">
-        <div class="col-10">
-          <h2><?php echo $title;?></h2>
-        </div>
-        <div class="col-2">
-         <!-- create new department -->
-         <!-- Modal create -->
-         <?php $validateUser = $this->session->fullname;
-         if ($validateUser == 'Admin') {
-          ?>
-            <button type="button" class="btn btn-primary create-category" id="add_category">
-              <i class="mdi mdi-plus-circle"></i>&nbsp;Create category
-            </button> 
-          <?php 
-        }
-        ?>
+    <div class="row">
+      <div class="col-9">
+        <h2><?php echo $title;?></h2>
       </div>
-    </div>
-  </div><br>
+      <div class="col-3">
+       <!-- create new location -->
+       <?php $validateUser = $this->session->fullname;
+       if ($validateUser == 'Admin') {
+        ?>
+        <div class="container">
+          <div class="row-fluid">
+            <div class="col-12">
+             <button type="button" class="btn btn-primary create-category" id="add_category">
+              <i class="mdi mdi-plus-circle"></i>&nbsp;Create new category
+            </button> 
+           </div>
+         </div>
+       </div>
+       <?php } ?>
+     </div>
+   </div><br>
   <div class="col-12">
     <div class="alert alert-success" style="display: none;">
 

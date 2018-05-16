@@ -20,15 +20,15 @@ class items extends CI_Controller {
         $this->session->set_userdata('last_page', $this->uri->uri_string());
         if($this->session->loggedIn === TRUE) {
            // Allowed methods
-         if ($this->session->isAdmin || $this->session->isSuperAdmin) {
+           if ($this->session->isAdmin || $this->session->isSuperAdmin) {
              //User management is reserved to admins and super admins
-         } else {
-           redirect('errors/privileges');
-       }
-   } else {
-     redirect('connection/login');
- }
- $this->load->model('items_model');
+           } else {
+             redirect('errors/privileges');
+         }
+     } else {
+       redirect('connection/login');
+   }
+   $this->load->model('items_model');
 }
 
     /**
@@ -216,4 +216,80 @@ class items extends CI_Controller {
         $result = $this->items_model->getAllModel($brandid);   
         echo json_encode($result);    
     }
+
+    // detail item
+
+    public function showDetailItem(){
+     $form = '';
+     $iditem=  $this->input->post('iditem'); 
+     $result = $this->items_model->showDetailItem($iditem);
+     $status='';
+     if ($result>0) {
+        foreach ($result as $value) {
+            if ($value->status==0) {
+               $status='Available';
+            }else{
+                $status='Not available';
+            }
+        $form .='<tr>';
+        $form .='<td>Name </td>';
+        $form .='<td>: '.$value->item.'</td>';
+        $form .='</tr>';
+        $form .='<tr>';
+        $form .='<td>Description </td>';
+        $form .='<td>: '.$value->description.'</td>';
+        $form .='</tr>';
+        $form .='<tr>';
+        $form .='<td>Label </td>';
+        $form .='<td>: '.$value->code.'</td>';
+        $form .='</tr>';
+        $form .='<tr>';
+        $form .='<td>Cost of item </td>';
+        $form .='<td>: $'.$value->cost.'</td>';
+        $form .='</tr>';
+        $form .='<tr>';
+        $form .='<td>Condition </td>';
+        $form .='<td>: '.$value->condition.'</td>';
+        $form .='</tr>';
+        $form .='<tr>';
+        $form .='<td>Type </td>';
+        $form .='<td>: '.$value->cat.'</td>';
+        $form .='</tr>';
+        $form .='<tr>';
+        $form .='<tr>';
+        $form .='<td>Brand </td>';
+        $form .='<td>: '.$value->brand.'</td>';
+        $form .='</tr>';
+        $form .='<tr>';
+        $form .='<td>Model </td>';
+        $form .='<td>: '.$value->model.'</td>';
+        $form .='</tr>';
+        $form .='<tr>';
+        $form .='<td>Material </td>';
+        $form .='<td>: '.$value->mat.'</td>';
+        $form .='</tr>';
+        $form .='<tr>';
+        $form .='<td>Location </td>';
+        $form .='<td>: '.$value->locat.'</td>';
+        $form .='</tr>';
+        $form .='<tr>';
+        $form .='<td>Department </td>';
+        $form .='<td>: '.$value->depat.'</td>';
+        $form .='</tr>';
+        $form .='<tr>';
+        $form .='<td>Username </td>';
+        $form .='<td>: '.$value->nameuser.'</td>';
+        $form .='</tr>';
+        $form .='<tr>';
+        $form .='<td>Owner </td>';
+        $form .='<td>: '.$value->owner.'</td>';
+        $form .='</tr>';
+        $form .='<tr>';
+        $form .='<td>Status </td>';
+        $form .='<td>: '.$status.'</td>';
+        $form .='</tr>';
+    }
+}
+echo json_encode($form);
+}
 }

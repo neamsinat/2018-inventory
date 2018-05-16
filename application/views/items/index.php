@@ -1,12 +1,28 @@
-<?php
-/**
- * This view displays the list of users.
- * @copyright  Copyright (c) 2014-2018 Benjamin BALET
- * @license    http://opensource.org/licenses/AGPL-3.0 AGPL-3.0
- * @link       https://github.com/bbalet/skeleton
- * @since      1.0.0
- */
-?>
+<style> 
+.dt-buttons .buttons-colvis{
+  background:#007bff;
+  color: #fff;
+  border: 1px solid #9990;
+  border-radius: 2px;
+}
+.dt-buttons>.buttons-colvis:hover{
+  background:#0872e4 !important;
+  color: #fff;
+  border: 1px solid #6660  !important;
+  border-radius: 2px;
+}
+.dt-button-collection .dt-button{
+  /*background: #0094e1 !important;*/
+  /*color: #fff !important;*/
+  border: 1px solid #6660  !important;
+  border-radius: 3px !important;
+}
+.dt-button-collection .dt-button:hover{
+  background: #007bff !important;
+  color: #fff !important;
+  border-radius: 2px !important;
+}
+</style>
 <br>
 <div id="container">
 	<div class="row-fluid">
@@ -23,27 +39,30 @@
     <div class="alert alert-success" style="display: none;"></div>
     <div class="table-responsive">
       <table id="items" cellpadding="0" cellspacing="0" class="table table-striped table-bordered display" width="100%">
-        <thead>
-          <tr>
-            <th class="permanent">Identifier</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Material</th>
-            <th>Condition</th>
-            <th>Department</th>
-            <th>Location</th>
-            <th>User</th>
-            <th>Owner</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="showdata">
+       <colgroup>
+        <col span="1" style="background-color:#eff3f7;">
+      </colgroup>
+      <thead>
+        <tr>
+          <th class="permanent">Identifier</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Material</th>
+          <th>Condition</th>
+          <th>Department</th>
+          <th>Location</th>
+          <th>User</th>
+          <th>Owner</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="showdata">
 
 
-        </tbody>
-      </table>
-    </div>
+      </tbody>
+    </table>
   </div>
+</div>
 </div>
 <div class="row-fluid"><div class="col-12">&nbsp;</div></div>
 
@@ -65,6 +84,34 @@
         <a href="#" class="btn btn-primary" id="delete-comfirm">Yes</a>
         <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
       </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- view detail -->
+<div id="viewDetailModal" class="modal hide fade " tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content ">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title">Item detail:</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body bg-light">
+        <table width="100%" class="table">
+          <colgroup>
+            <col span="1" style="background-color:#eff3f7;">
+          </colgroup>
+          <tbody id="frm_view">
+
+          </tbody>
+        </table>
+      </div> 
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+      </div>     
     </div>
   </div>
 </div>
@@ -137,10 +184,10 @@ function showAllitems()
           '&nbsp;<?php  
           if ($validateUser == 'Admin') {
            ?><a href="<?php echo base_url() ?>items/edit/'+data[i].iditem+'" class="item-edit" dataid="'+data[i].iditem+'"><i class="mdi mdi-pencil"></i></a>'+
-           '&nbsp;<a href="#" class="item-delete" dataid="'+data[i].iditem+'"><i class="mdi mdi-delete"></i></a> <?php } ?>'+
-           '&nbsp;<a href="#" class="item-view" dataid="'+data[i].iditem+'"><i class="mdi mdi-eye"></i></a>'
+           '<a href="#" class="item-delete text-danger" dataid="'+data[i].iditem+'"><i class="mdi mdi-delete"></i></a> <?php } ?>'+
+           '<a href="#" class="item-view" dataid="'+data[i].iditem+'"><i class="mdi mdi-eye text-primary"></i></a>'
            ,
-           data[i].item,data[i].cat,data[i].mat,data[i].condition,data[i].depat,data[i].locat,data[i].nameuser,data[i].owner,'<span class="text-info">'+status+' </span>'
+           data[i].item,data[i].cat,data[i].mat,data[i].condition,data[i].depat,data[i].locat,data[i].nameuser,data[i].owner,'<span class="text-primary">'+status+' </span>'
            ] ).draw( false );
         n++;
       }
@@ -150,7 +197,7 @@ function showAllitems()
     }
   });
 }
-// delete material by ajax
+// delete item by ajax
 $('#showdata').on('click', '.item-delete', function(){
   var id = $(this).attr('dataid');
   $('#deleteModal').data('id', id).modal('show');
@@ -174,6 +221,27 @@ $("#delete-comfirm").on('click',function(){
       alert("Error delete! this item is has relationship with another...");
     }
   });
+});
+
+
+// delete material by ajax
+$('#showdata').on('click', '.item-view', function(){
+  var id = $(this).attr('dataid');
+  $.ajax({
+   type: 'POST',
+   data: {iditem: id},
+   url: '<?php echo base_url();?>/items/showDetailItem',
+   async: true,
+   dataType: 'json',
+   success: function(data){
+    // alert('success');
+    $('#frm_view').html(data);
+    $('#viewDetailModal').modal('show');
+  },
+  error: function(){
+   alert('Could not get any data from Database');
+ }
+});
 });
 
 });

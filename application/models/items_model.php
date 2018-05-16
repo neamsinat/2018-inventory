@@ -33,6 +33,28 @@ class items_model extends CI_Model {
         }
     }
 
+    // detail item
+
+     public function showDetailItem($id){
+        $this->db->select('item.iditem, item.item, item.itemdescription AS "description", category.category AS "cat",category.idcategory AS "catid", condition as "condition", material.material as "mat",material.idmaterial as "matid", department.department as "depat" ,department.iddepartment as "depatid" ,location.location as "locat",location.idlocation as "locatid", CONCAT(skeleton_users.firstname," ",skeleton_users.lastname) AS "nameuser",users.id AS "userid", owner.owner as "owner", owner.idowner as "ownerid" , model.model as "model", model.idmodel as "modelid" , brand.brand as "brand", brand.idbrand as "brandid" , item.itemcost AS "cost", item.date AS "date", item.code, status');
+        $this->db->join('category', 'category.idcategory = item.categoryid');    
+        $this->db->join('material', 'material.idmaterial = item.materialid');    
+        $this->db->join('department', 'department.iddepartment = item.departmentid');    
+        $this->db->join('location', 'location.idlocation = item.locationid');    
+        $this->db->join('users', 'users.id = item.userid');    
+        $this->db->join('owner', 'owner.idowner = item.ownerid'); 
+        $this->db->join('model', 'model.idmodel = item.modelid'); 
+        $this->db->join('brand', 'model.brandid = brand.idbrand'); 
+        $this->db->where('item.iditem', $id);
+        $query = $this->db->get('item');
+
+        if($query->num_rows() > 0){
+            return $query->result();
+        }else{
+            return false;
+        }
+    }
+
     public function showAllItems(){
         // $query = $this->db->get('material');
 

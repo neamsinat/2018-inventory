@@ -1,20 +1,29 @@
-<br>
+
+
+  <br>
 <div id="container" class="container">
   <div class="row-fluid">
     <div class="row">
       <div class="col-9">
-        <h2>List of models from <span style="color: green; font-size: 30px;">(<?php echo $title;?>)</span> </h2> 
+        <h2>List of models from <span style="color: green; font-size: 30px;">(<?php echo $title;?>)</span> </h2>
       </div>
       <div class="col-3">
+       <!-- create new material -->
        <?php $validateUser = $this->session->fullname;
        if ($validateUser == 'Admin') {
         ?>
-        <button type="button" class="btn btn-primary" id="create_model">
+        <div class="container">
+          <div class="row-fluid">
+            <div class="col-12">
+             <button type="button" class="btn btn-primary" id="create_model">
           <i class="mdi mdi-plus-circle"></i>&nbsp;Create new model
         </button>
-      <?php } ?>
-    </div>
-  </div><br>
+           </div>
+         </div>
+       </div>
+       <?php } ?>
+     </div>
+   </div><br>
   <div class="col-12">
     <div class="alert alert-success" style="display: none;"> </div>
     <table id="models" cellpadding="0" cellspacing="0" class="table table-striped table-bordered" width="100%">
